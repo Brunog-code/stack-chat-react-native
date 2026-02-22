@@ -1,6 +1,8 @@
 import { useFonts } from "expo-font";
 import { SplashScreen, Stack, useRouter, useSegments } from "expo-router";
 import { useEffect, useState } from "react";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import "./../global.css";
 
 function RouteGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -21,7 +23,7 @@ function RouteGuard({ children }: { children: React.ReactNode }) {
     if (isMounted && !userIsAuthenticated && !isAuthRoute) {
       router.replace("/(auth)/login");
     } else if (isMounted && userIsAuthenticated && isAuthRoute) {
-      router.replace("/");
+      // router.replace("/");
     }
   }, [isMounted, userIsAuthenticated, segmentes]);
 
@@ -46,10 +48,12 @@ export default function RootLayout() {
   if (!loaded) return null;
 
   return (
-    <RouteGuard>
-      <Stack>
-        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-      </Stack>
-    </RouteGuard>
+    <SafeAreaProvider>
+      <RouteGuard>
+        <Stack>
+          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+        </Stack>
+      </RouteGuard>
+    </SafeAreaProvider>
   );
 }
