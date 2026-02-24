@@ -41,6 +41,7 @@ model ChatMember {
   userId     String   @db.ObjectId
   chatRoomId String   @db.ObjectId
   role       String   @default("member") // admin | member
+  lastReadAt DateTime?
 
   user     User     @relation(fields: [userId], references: [id])
   chatRoom ChatRoom @relation(fields: [chatRoomId], references: [id])

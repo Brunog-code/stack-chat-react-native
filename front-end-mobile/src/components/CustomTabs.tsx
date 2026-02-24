@@ -4,6 +4,7 @@ import Feather from "@expo/vector-icons/Feather";
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import React from "react";
 import { theme } from "../constants/theme";
+import { LinearGradient } from "expo-linear-gradient";
 
 export const CustomTabs = ({ state, navigation }: BottomTabBarProps) => {
   const tabs = [
@@ -20,36 +21,43 @@ export const CustomTabs = ({ state, navigation }: BottomTabBarProps) => {
   ];
 
   return (
-    <View className="flex-row justify-around py-1 bg-details_bg border-2 border-purple mb-2 ml-12 mr-12 rounded-3xl ">
-      {state.routes.map((route, index) => {
-        const isActive = state.index === index;
+    <LinearGradient
+      colors={["rgba(255,0,0,0)", "rgba(255,0,0,0.2)", "rgba(255,0,0,0.5)"]}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 0, y: 1 }}
+      style={{ width: "100%", height: 80, position: "absolute", bottom: 0 }}
+    >
+      <View className="absolute bottom-4 left-4 right-4 flex-row justify-around py-1 bg-details_bg border-2 border-purple mb-2 ml-12 mr-12 rounded-3xl ">
+        {state.routes.map((route, index) => {
+          const isActive = state.index === index;
 
-        const tab = tabs.find((t) => t.name === route.name);
+          const tab = tabs.find((t) => t.name === route.name);
 
-        return (
-          <Pressable
-            key={route.key}
-            onPress={() => navigation.navigate(route.name)}
-            className="items-center px-5 py-1 rounded-3xl"
-            style={{
-              backgroundColor: isActive ? theme.colors.purple : "transparent",
-            }}
-          >
-            <View className="items-center gap-1 justify-center">
-              {/* Clona o ícone com a cor correta */}
-              {tab?.icon &&
-                React.cloneElement(tab.icon, {
-                  color: isActive ? theme.colors.text : theme.colors.gray,
-                })}
-              <Text
-                className={`text-base ml-1   ${isActive ? " font-bold text-text" : "font-normal text-gray"}`}
-              >
-                {tab?.label}
-              </Text>
-            </View>
-          </Pressable>
-        );
-      })}
-    </View>
+          return (
+            <Pressable
+              key={route.key}
+              onPress={() => navigation.navigate(route.name)}
+              className="items-center px-5 py-1 rounded-3xl"
+              style={{
+                backgroundColor: isActive ? theme.colors.purple : "transparent",
+              }}
+            >
+              <View className="items-center gap-1 justify-center">
+                {/* Clona o ícone com a cor correta */}
+                {tab?.icon &&
+                  React.cloneElement(tab.icon, {
+                    color: isActive ? theme.colors.text : theme.colors.gray,
+                  })}
+                <Text
+                  className={`text-base ml-1   ${isActive ? " font-bold text-text" : "font-normal text-gray"}`}
+                >
+                  {tab?.label}
+                </Text>
+              </View>
+            </Pressable>
+          );
+        })}
+      </View>
+    </LinearGradient>
   );
 };

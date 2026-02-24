@@ -1,7 +1,6 @@
 import { Logo } from "@/src/components/Logo";
 import { theme } from "@/src/constants/theme";
-import { useAuth } from "@/src/contexts/auth-context";
-import { View, Text, ScrollView } from "react-native";
+import { View, Text, FlatList } from "react-native";
 import { ActivityIndicator, Button } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Feather from "@expo/vector-icons/Feather";
@@ -10,6 +9,7 @@ import Toast from "react-native-toast-message";
 import { getApiError } from "@/src/utils/get-api-error";
 import { api } from "@/src/lib/api";
 import { IResponseDataRooms } from "@/src/types";
+import { ChatCard } from "@/src/components/ChatCard";
 
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
@@ -17,8 +17,6 @@ export default function HomeScreen() {
   const [loadingFetchDataRooms, setLoadingFetchDataRooms] =
     useState<boolean>(true);
   const [roomData, setRoomsData] = useState<IResponseDataRooms[] | null>(null);
-
-  const { logout } = useAuth();
 
   useEffect(() => {
     fetchRoomsData();
@@ -28,7 +26,6 @@ export default function HomeScreen() {
     try {
       const response = await api.get<IResponseDataRooms[]>("/chat-room");
 
-      console.log(response.data);
       setRoomsData(response.data);
     } catch (error) {
       console.log(error);
@@ -56,7 +53,7 @@ export default function HomeScreen() {
       style={{
         backgroundColor: theme.colors.background,
         paddingTop: insets.top,
-        paddingBottom: insets.bottom,
+        // paddingBottom: insets.bottom,
         paddingLeft: insets.left + 10,
         paddingRight: insets.right + 10,
       }}
@@ -66,9 +63,27 @@ export default function HomeScreen() {
         <Feather name="search" size={32} color={theme.colors.text} />
       </View>
 
-      <ScrollView></ScrollView>
-      <Text>Home</Text>
-      <Button onPress={logout}>Sair</Button>
+      <View className="flex-1 mt-6">
+        <FlatList
+          data={roomData}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <ChatCard
+            img={item.image}
+            title={item.name}
+            
+             />
+          )}
+          ItemSeparatorComponent={() => <View style={{ height: 24 }} />}
+          ListEmptyComponent={
+            <View className="flex-1 justify-center items-center py-10">
+              <Text className="text-center text-text text-lg leading-7">
+                Nenhum grupo para exibir
+              </Text>
+            </View>
+          }
+        />
+      </View>
     </View>
   );
 }
