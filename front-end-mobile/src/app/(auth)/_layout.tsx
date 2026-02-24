@@ -1,9 +1,22 @@
 import { theme } from "@/src/constants/theme";
-import { Stack } from "expo-router";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useAuth } from "@/src/contexts/auth-context";
+import { Redirect, Stack } from "expo-router";
+import { View } from "react-native";
+import { ActivityIndicator } from "react-native-paper";
 
 export default function AuthLayout() {
-  const insets = useSafeAreaInsets();
+  const { user, loadingUser } = useAuth();
+
+  if (loadingUser) {
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <ActivityIndicator size="large" color={theme.colors.purple} />
+    </View>;
+  }
+
+  if (user) {
+    return <Redirect href="/(tabs)/home" />;
+  }
+
   return (
     <Stack
       screenOptions={{
@@ -12,12 +25,11 @@ export default function AuthLayout() {
         },
         contentStyle: {
           backgroundColor: theme.colors.background,
-          // paddingTop: insets.top,
         },
       }}
     >
       <Stack.Screen name="login" options={{ headerShown: false }} />
-      <Stack.Screen name="register" />
+      <Stack.Screen name="register" options={{ headerShown: false }} />
     </Stack>
   );
 }

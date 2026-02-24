@@ -7,16 +7,60 @@ import {
   Text,
   View,
 } from "react-native";
-import { Button, TextInput } from "react-native-paper";
+import { ActivityIndicator, Button, TextInput } from "react-native-paper";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { AuthFormData, authSchema } from "@/src/schemas/authSchema";
+import { useAuth } from "@/src/contexts/auth-context";
+import { useState } from "react";
+import Toast from "react-native-toast-message";
+import { getApiError } from "@/src/utils/get-api-error";
+import { Logo } from "@/src/components/Logo";
 
 const { width } = Dimensions.get("window");
 
 export default function LoginScreen() {
   const router = useRouter();
 
-  function handleAlterToRegister() {
-    router.push("/register");
+  const [loading, setLoading] = useState(false);
+
+  const { login } = useAuth();
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<AuthFormData>({
+    resolver: zodResolver(authSchema),
+  });
+
+  async function handleLogin(data: AuthFormData) {
+    try {
+      setLoading(true);
+
+      const email = data.email;
+      const password = data.password;
+
+      const message = await login(email, password);
+
+      Toast.show({
+        type: "success",
+        text1: message,
+      });
+
+      router.replace("/(tabs)/home");
+    } catch (error) {
+      console.log(error);
+
+      Toast.show({
+        type: "error",
+        text1: getApiError(error),
+      });
+    } finally {
+      setLoading(false);
+    }
   }
+
   return (
     <KeyboardAvoidingView className="flex-1 relative" behavior={"padding"}>
       <View className="flex-1 items-center justify-center gap-6">
@@ -28,72 +72,97 @@ export default function LoginScreen() {
               backgroundColor: theme.colors.purple,
               borderBottomLeftRadius: width,
               borderBottomRightRadius: width,
-              opacity: 0.6,
+              opacity: 0.5,
             }}
           />
         </View>
 
         <View className=" items-center ">
-          <View className=" flex-row items-center">
-            <Text
-              className="text-5xl font-jet text-purple"
-              style={{
-                textShadowColor: "rgba(0,0,0,0.6)",
-                textShadowOffset: { width: 2, height: 2 },
-                textShadowRadius: 4,
-              }}
-            >
-              Stack<Text className="text-text">Chat</Text>
-            </Text>
-            <Image
-              source={require("./../../../assets/images/logo.png")}
-              className="w-[70px] h-[70px]"
-            />
-          </View>
+          <Logo />
+
           <Text className="text-text text-xl font-roboto">
             Conecte-se à comunidade dev
           </Text>
         </View>
 
-        <View className="w-[80%] ">
-          <TextInput
-            label="Email"
-            mode="outlined"
-            autoCapitalize="none"
-            keyboardType="email-address"
-            style={{ backgroundColor: "#24304A" }}
-            outlineColor="#4b5563"
-            activeOutlineColor="#8B5CF6"
-            textColor="#ffffff"
-            placeholderTextColor="#9ca3af"
-            theme={{ roundness: 8 }}
+        <View className="w-[80%] gap-1">
+          <Controller
+            control={control}
+            name="email"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                label="Email"
+                mode="outlined"
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                autoCapitalize="none"
+                keyboardType="email-address"
+                style={{ backgroundColor: "#24304A" }}
+                outlineColor="#4b5563"
+                activeOutlineColor="#8B5CF6"
+                textColor="#ffffff"
+                placeholderTextColor="#9ca3af"
+                theme={{ roundness: 8 }}
+              />
+            )}
           />
+          {errors.email && (
+            <Text className="text-red-500">{errors.email.message}</Text>
+          )}
 
-          <TextInput
-            label="password"
-            mode="outlined"
-            autoCapitalize="none"
-            secureTextEntry
-            style={{ backgroundColor: "#24304A" }}
-            outlineColor="#4b5563"
-            activeOutlineColor="#8B5CF6"
-            textColor="#ffffff"
-            placeholderTextColor="#9ca3af"
-            theme={{ roundness: 8 }}
+          <Controller
+            control={control}
+            name="password"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                label="senha"
+                mode="outlined"
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                autoCapitalize="none"
+                secureTextEntry
+                style={{ backgroundColor: "#24304A" }}
+                outlineColor="#4b5563"
+                activeOutlineColor="#8B5CF6"
+                textColor="#ffffff"
+                placeholderTextColor="#9ca3af"
+                theme={{ roundness: 8 }}
+              />
+            )}
           />
+          {errors.password && (
+            <Text className="text-red-500">{errors.password.message}</Text>
+          )}
 
           <Button
             mode="contained"
+            onPress={handleSubmit(handleLogin)}
             buttonColor={theme.colors.purple}
-            textColor={theme.colors.text}
+            textColor={loading ? theme.colors.details_bg : theme.colors.text}
             style={{
               height: 50,
               borderRadius: 12,
               justifyContent: "center",
               marginTop: 10,
+              backgroundColor: theme.colors.purple, // força via style
+              opacity: loading ? 0.6 : 1,
             }}
+            labelStyle={{ fontSize: 20, fontWeight: "bold" }}
+            disabled={loading}
+            icon={
+              loading
+                ? () => (
+                    <ActivityIndicator
+                      color={theme.colors.details_bg}
+                      size={18}
+                    />
+                  )
+                : undefined
+            }
           >
-            Entrar
+            {loading ? "Entrando..." : "Entrar"}
           </Button>
 
           <View className="items-center justify-center mt-6 gap-4">
@@ -110,7 +179,7 @@ export default function LoginScreen() {
               Primeiro acesso?{" "}
               <Text
                 className="text-purple font-bold"
-                onPress={handleAlterToRegister}
+                onPress={() => router.push("/register")}
               >
                 Criar conta
               </Text>

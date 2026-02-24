@@ -1,34 +1,13 @@
 import { useFonts } from "expo-font";
-import { SplashScreen, Stack, useRouter, useSegments } from "expo-router";
-import { useEffect, useState } from "react";
+import { SplashScreen, Stack } from "expo-router";
+import { useEffect } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import "./../global.css";
+import Toast from "react-native-toast-message";
+import { AuthProvider } from "../contexts/auth-context";
 
-function RouteGuard({ children }: { children: React.ReactNode }) {
-  const router = useRouter();
-
-  const segmentes = useSegments();
-
-  const [isMounted, setIsMounted] = useState<boolean>(false);
-  const [userIsAuthenticated, setUserIsAuthenticated] =
-    useState<boolean>(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  useEffect(() => {
-    const isAuthRoute = segmentes[0] === "(auth)";
-
-    if (isMounted && !userIsAuthenticated && !isAuthRoute) {
-      router.replace("/(auth)/login");
-    } else if (isMounted && userIsAuthenticated && isAuthRoute) {
-      // router.replace("/");
-    }
-  }, [isMounted, userIsAuthenticated, segmentes]);
-
-  return <>{children}</>;
-}
+import { theme } from "../constants/theme";
+import { StatusBar } from "expo-status-bar";
 
 export default function RootLayout() {
   SplashScreen.preventAutoHideAsync();
@@ -48,12 +27,16 @@ export default function RootLayout() {
   if (!loaded) return null;
 
   return (
-    <SafeAreaProvider>
-      <RouteGuard>
-        <Stack>
-          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+    <AuthProvider>
+      <SafeAreaProvider>
+        <StatusBar style="light" backgroundColor={theme.colors.background} />
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="index" />
+          <Stack.Screen name="(auth)" />
+          <Stack.Screen name="(tabs)" />
         </Stack>
-      </RouteGuard>
-    </SafeAreaProvider>
+        <Toast />
+      </SafeAreaProvider>
+    </AuthProvider>
   );
 }
