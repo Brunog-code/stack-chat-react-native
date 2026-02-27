@@ -1,7 +1,6 @@
 import { Logo } from "@/src/components/Logo";
 import { theme } from "@/src/constants/theme";
 import { View, Text, FlatList } from "react-native";
-import { ActivityIndicator, Button } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Feather from "@expo/vector-icons/Feather";
 import { useEffect, useState } from "react";
@@ -9,10 +8,17 @@ import Toast from "react-native-toast-message";
 import { getApiError } from "@/src/utils/get-api-error";
 import { api } from "@/src/lib/api";
 import { IResponseDataRooms } from "@/src/types";
-import { ChatCard } from "@/src/components/ChatCard";
+import { ChatCard } from "@/src/components/ChatRoomCard";
+import { useAuth } from "@/src/contexts/auth-context";
+import { useRouter } from "expo-router";
+import { LoadingSpinner } from "@/src/components/LoadingSpinner";
 
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
+
+  const router = useRouter();
+
+  const { user } = useAuth();
 
   const [loadingFetchDataRooms, setLoadingFetchDataRooms] =
     useState<boolean>(true);
@@ -24,7 +30,9 @@ export default function HomeScreen() {
 
   async function fetchRoomsData() {
     try {
-      const response = await api.get<IResponseDataRooms[]>("/chat-room");
+      const response = await api.get<IResponseDataRooms[]>("/chat-room", {
+        params: { user_id: user?.id },
+      });
 
       setRoomsData(response.data);
     } catch (error) {
@@ -40,11 +48,14 @@ export default function HomeScreen() {
   }
 
   if (loadingFetchDataRooms) {
-    return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ActivityIndicator size="large" color={theme.colors.purple} />
-      </View>
-    );
+    <LoadingSpinner />;
+  }
+
+  function handleOpenRoom(id: string, name: string, image: string) {
+    router.push({
+      pathname: "/chat/[roomId]",
+      params: { roomId: id, name: name, image: image },
+    });
   }
 
   return (
@@ -69,12 +80,19 @@ export default function HomeScreen() {
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <ChatCard
-            img={item.image}
-            title={item.name}
-            
-             />
+              img={item.image}
+              title={item.name}
+              lastUserName={item.messages[0].user.name}
+              lastMessage={item.messages[0].content ?? ""}
+              unreadMessagesCount={item.unreadCount}
+              lastUnreadMessageTime={item.messages[0].createdAt}
+              onPress={() => handleOpenRoom(item.id, item.name, item.image)}
+            />
           )}
-          ItemSeparatorComponent={() => <View style={{ height: 24 }} />}
+          ItemSeparatorComponent={() => <View style={{ height: 26 }} />}
+          contentContainerStyle={{
+            paddingBottom: 110,
+          }}
           ListEmptyComponent={
             <View className="flex-1 justify-center items-center py-10">
               <Text className="text-center text-text text-lg leading-7">

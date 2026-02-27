@@ -22,7 +22,7 @@ export const CustomTabs = ({ state, navigation }: BottomTabBarProps) => {
 
   return (
     <LinearGradient
-      colors={["rgba(255,0,0,0)", "rgba(255,0,0,0.2)", "rgba(255,0,0,0.5)"]}
+      colors={["rgba(32,41,66,0)", "rgba(32,41,66,0.8)", "rgba(32,41,66,1)"]}
       start={{ x: 0, y: 0 }}
       end={{ x: 0, y: 1 }}
       style={{ width: "100%", height: 80, position: "absolute", bottom: 0 }}

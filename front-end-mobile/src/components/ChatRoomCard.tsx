@@ -1,42 +1,47 @@
 import { Avatar, Badge } from "react-native-paper";
 import { theme } from "../constants/theme";
-import { Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 
 interface IChatCardProps {
   img: string;
   title: string;
   lastMessage: string;
-  lastUser: string;
+  lastUserName: string;
   unreadMessagesCount: number;
-  lastUnreadMessageTime: number;
+  lastUnreadMessageTime: string;
+  onPress: () => void;
 }
 
 export const ChatCard = ({
   img,
   lastMessage,
-  lastUser,
+  lastUserName,
   title,
   unreadMessagesCount,
   lastUnreadMessageTime,
+  onPress,
 }: IChatCardProps) => {
   return (
-    <View className="w-full flex-row justify-between items-center ">
+    <Pressable
+      onPress={onPress}
+      className="w-full flex-row justify-between items-center "
+    >
       <View className="flex-row items-center gap-4">
         <View>
           <Avatar.Image source={{ uri: img }} />
         </View>
 
         <View>
-          <Text className="text-text text-2xl font-bold">JavaScript</Text>
+          <Text className="text-text text-2xl font-bold">{title}</Text>
           <Text className="text-text">
-            Bruno: <Text className="text-gray">O que é uma promise?</Text>
+            {lastUserName}: <Text className="text-gray">{lastMessage}</Text>
           </Text>
         </View>
       </View>
 
       <View className="gap-2 items-center justify-center">
         <Text className="text-purple">
-          {new Date().toLocaleTimeString("pt-BR", {
+          {new Date(lastUnreadMessageTime).toLocaleTimeString("pt-BR", {
             hour: "2-digit",
             minute: "2-digit",
           })}
@@ -47,9 +52,9 @@ export const ChatCard = ({
             backgroundColor: theme.colors.details_bg,
           }}
         >
-          3
+          {unreadMessagesCount}
         </Badge>
       </View>
-    </View>
+    </Pressable>
   );
 };

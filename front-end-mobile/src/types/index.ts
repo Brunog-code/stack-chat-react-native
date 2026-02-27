@@ -27,6 +27,7 @@ export interface IResponseDataRooms {
   createdAt: string;
   updatedAt: string;
 
+  // Últimas mensagens (ou mensagens retornadas)
   messages: {
     id: string;
     chatRoomId: string;
@@ -45,4 +46,35 @@ export interface IResponseDataRooms {
       updatedAt: string;
     };
   }[];
+
+  // Membros da sala
+  members: {
+    id: string;
+    userId: string;
+    chatRoomId: string;
+    role: "admin" | "member";
+    lastReadAt: string | null;
+    joinedAt: string;
+  }[];
+
+  // Quantidade de mensagens não lidas
+  unreadCount: number;
+}
+
+export interface IMessage {
+  id: string;
+  chatRoomId: string;
+  userId: string;
+  content: string;
+  imageUrl: string ;
+  messageType: "text" | "image";
+  createdAt: string;
+  user: {
+    name: string;
+  };
+}
+
+export interface IResponseMessageRoom {
+  messages: IMessage[];
+  lastReadMessageId: string;
 }

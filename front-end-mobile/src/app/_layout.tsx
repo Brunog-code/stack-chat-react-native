@@ -29,11 +29,16 @@ export default function RootLayout() {
   return (
     <AuthProvider>
       <SafeAreaProvider>
-        <StatusBar style="light" backgroundColor={theme.colors.background} />
+        <StatusBar
+          style="light"
+          backgroundColor={theme.colors.background}
+          translucent={false}
+        />
         <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen name="index" />
           <Stack.Screen name="(auth)" />
           <Stack.Screen name="(tabs)" />
+          <Stack.Screen name="chat/[roomId]" />
         </Stack>
         <Toast />
       </SafeAreaProvider>

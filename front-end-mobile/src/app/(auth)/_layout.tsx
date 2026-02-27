@@ -1,16 +1,13 @@
+import { LoadingSpinner } from "@/src/components/LoadingSpinner";
 import { theme } from "@/src/constants/theme";
 import { useAuth } from "@/src/contexts/auth-context";
 import { Redirect, Stack } from "expo-router";
-import { View } from "react-native";
-import { ActivityIndicator } from "react-native-paper";
 
 export default function AuthLayout() {
   const { user, loadingUser } = useAuth();
 
   if (loadingUser) {
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <ActivityIndicator size="large" color={theme.colors.purple} />
-    </View>;
+    <LoadingSpinner />;
   }
 
   if (user) {

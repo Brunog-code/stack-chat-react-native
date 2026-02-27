@@ -1,7 +1,31 @@
 import prisma from "../../src/lib/prisma.js";
+import { faker } from "@faker-js/faker"; // npm i @faker-js/faker
 
 async function main() {
-  const chatRooms = [
+  // 1️⃣ Criar usuários
+  const usersData = [];
+  for (let i = 1; i <= 10; i++) {
+    usersData.push({
+      name: faker.person.firstName() + " " + faker.person.lastName(),
+      email: `user${i}@teste.com`,
+      password: "123456",
+      image: faker.image.avatar(),
+    });
+  }
+
+  const users = [];
+  for (const user of usersData) {
+    const u = await prisma.user.upsert({
+      where: { email: user.email },
+      update: {},
+      create: user,
+    });
+    users.push(u);
+  }
+  console.log("Usuários criados!");
+
+  // 2️⃣ Criar chatRooms
+  const chatRoomsData = [
     {
       name: "JavaScript",
       description:
@@ -59,20 +83,70 @@ async function main() {
     },
   ];
 
-  for (const room of chatRooms) {
-    await prisma.chatRoom.upsert({
+  const chatRooms = [];
+  for (const room of chatRoomsData) {
+    const r = await prisma.chatRoom.upsert({
       where: { name: room.name },
       update: {},
-      create: {
-        name: room.name,
-        description: room.description,
-        image: room.image,
-        isPrivate: false,
-      },
+      create: { ...room, isPrivate: false },
     });
+    chatRooms.push(r);
   }
+  console.log("ChatRooms criadas!");
 
-  console.log("ChatRooms criadas com sucesso!");
+  // 3️⃣ Adicionar usuários como membros de cada chat e setar lastReadAt
+  for (const room of chatRooms) {
+    for (let i = 0; i < users.length; i++) {
+      const isLastUser = i === users.length - 1; // último usuário vai ter lastReadAt null
+      await prisma.chatMember.upsert({
+        where: {
+          userId_chatRoomId: { userId: users[i].id, chatRoomId: room.id },
+        },
+        update: {},
+        create: {
+          userId: users[i].id,
+          chatRoomId: room.id,
+          role: "member",
+          lastReadAt: isLastUser ? null : new Date(),
+        },
+      });
+    }
+  }
+  console.log("Usuários adicionados aos chats com lastReadAt!");
+
+  // 4️⃣ Criar mensagens de teste (15 mensagens por chat)
+  const messageContents = [
+    "Olá pessoal!",
+    "Como estão?",
+    "Alguém conhece esse framework?",
+    "Preciso de ajuda com um bug.",
+    "Isso é incrível!",
+    "Vamos fazer pair programming?",
+    "Alguém testou essa versão nova?",
+    "Boa noite a todos!",
+    "Sugestões de livros?",
+    "Qual IDE vocês usam?",
+    "Gostei desse tutorial.",
+    "Alguém quer colaborar?",
+    "Achei interessante esse artigo.",
+    "Podem revisar meu código?",
+    "Que desafio legal!",
+  ];
+
+  for (const room of chatRooms) {
+    for (let i = 0; i < 15; i++) {
+      const user = users[Math.floor(Math.random() * users.length)];
+      await prisma.message.create({
+        data: {
+          chatRoomId: room.id,
+          userId: user.id,
+          content: messageContents[i],
+          messageType: "text",
+        },
+      });
+    }
+  }
+  console.log("Mensagens criadas em todos os chats!");
 }
 
 main()

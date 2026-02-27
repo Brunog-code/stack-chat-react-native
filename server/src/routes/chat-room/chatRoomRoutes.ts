@@ -11,5 +11,10 @@ const chatRoomService = new ChatRoomService();
 const chatRoomController = new ChatRoomController(chatRoomService);
 
 router.get("/", authenticateToken, chatRoomController.getAllChatRooms);
+router.get(
+  "/messages",
+  authenticateToken,
+  chatRoomController.getMessagesByRoom,
+);
 
 export default router;
