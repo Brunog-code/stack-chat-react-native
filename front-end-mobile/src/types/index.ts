@@ -66,12 +66,14 @@ export interface IMessage {
   chatRoomId: string;
   userId: string;
   content: string;
-  imageUrl: string ;
-  messageType: "text" | "image";
+  imageUrl: string;
+  messageType: "text" | "image" | "video";
   createdAt: string;
   user: {
     name: string;
+    image?: string | null;
   };
+  sending?: boolean; // 👈 para optimistic update
 }
 
 export interface IResponseMessageRoom {

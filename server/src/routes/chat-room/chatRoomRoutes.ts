@@ -2,7 +2,7 @@ import { Router } from "express";
 
 import { authenticateToken } from "../../middlewares/authenticate-token.js";
 import { ChatRoomController } from "../../controllers/chat-room/ChatRoomController.js";
-import { ChatRoomService } from "../../services/chat-room/chatRoomService.js";
+import { ChatRoomService } from "../../services/chat-room/ChatRoomService.js";
 
 const router = Router();
 

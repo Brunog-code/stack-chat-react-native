@@ -63,29 +63,28 @@ export class ChatRoomService {
     //Busca as últimas 100 mensagens
     const messages = await prisma.message.findMany({
       where: { chatRoomId: roomId },
-      orderBy: { createdAt: "asc" },
+      orderBy: { createdAt: "desc" },
       take: 100,
       include: {
         user: {
           select: {
             name: true,
+            image: true,
           },
         },
       },
     });
 
-    //Encontra a última mensagem lida
+    //Encontra o horario da última mensagem lida
     const lastReadAt = member?.lastReadAt;
 
     //Pega a última mensagem com createdAt <= lastReadAt
     //se tiver lastReadAt retorno id dela, se nao tiver retorna o id do index 0
     const lastRead = lastReadAt
-      ? [...messages]
-          .reverse()
-          .find((m) => new Date(m.createdAt) <= new Date(lastReadAt))
+      ? messages.find((m) => m.createdAt <= lastReadAt)
       : null;
 
-    const lastReadMessageId = lastRead?.id ?? messages[0].id;
+    const lastReadMessageId = lastRead?.id ?? null;
 
     return { messages, lastReadMessageId };
   };

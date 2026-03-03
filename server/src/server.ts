@@ -1,7 +1,9 @@
 import { createServer } from "node:http";
 import { Server } from "socket.io";
 import app from "./app.js";
-import { chatSocket } from "./sockets/chat.js";
+import { ChatMessageService } from "./services/chat-room/ChatMessageService.js";
+import { ChatSocket } from "./sockets/chat/ChatSocket.js";
+import { socketAuthMiddleware } from "./middlewares/socket-auth-middleware.js";
 
 //cria servidor HTTP
 const server = createServer(app);
@@ -13,8 +15,14 @@ const io = new Server(server, {
   },
 });
 
+//midleware de auth do socket
+io.use(socketAuthMiddleware);
+
 // registra o chat
-chatSocket(io);
+const chatMessageService = new ChatMessageService();
+const chatSocket = new ChatSocket(io, chatMessageService);
+
+chatSocket.initialize();
 
 //iniciando server
 const PORT = 3333;

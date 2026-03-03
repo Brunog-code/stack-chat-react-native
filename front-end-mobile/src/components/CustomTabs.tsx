@@ -5,8 +5,10 @@ import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import React from "react";
 import { theme } from "../constants/theme";
 import { LinearGradient } from "expo-linear-gradient";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export const CustomTabs = ({ state, navigation }: BottomTabBarProps) => {
+  const insets = useSafeAreaInsets();
   const tabs = [
     {
       name: "home",
@@ -25,9 +27,22 @@ export const CustomTabs = ({ state, navigation }: BottomTabBarProps) => {
       colors={["rgba(32,41,66,0)", "rgba(32,41,66,0.8)", "rgba(32,41,66,1)"]}
       start={{ x: 0, y: 0 }}
       end={{ x: 0, y: 1 }}
-      style={{ width: "100%", height: 80, position: "absolute", bottom: 0 }}
+      style={{
+        width: "100%",
+        height: 80 + insets.bottom, // 👈 adiciona inset aqui
+        position: "absolute",
+        bottom: 0,
+      }}
     >
-      <View className="absolute bottom-4 left-4 right-4 flex-row justify-around py-1 bg-details_bg border-2 border-purple mb-2 ml-12 mr-12 rounded-3xl ">
+      <View
+        style={{
+          position: "absolute",
+          bottom: insets.bottom + 5, // 👈 sobe respeitando safe area
+          left: 50,
+          right: 50,
+        }}
+        className="flex-row justify-around py-1 bg-details_bg border-2 border-purple rounded-3xl"
+      >
         {state.routes.map((route, index) => {
           const isActive = state.index === index;
 

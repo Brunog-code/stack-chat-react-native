@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { ILoginResponse, IUser } from "../types";
 import { api } from "../lib/api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { SplashScreen } from "expo-router";
+import { connectSocket, disconnectSocket } from "../lib/socket";
 
 interface AuthProviderProps {
   children: React.ReactNode;
@@ -45,6 +45,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const parsedUser = JSON.parse(storageUser);
       setUser(parsedUser);
 
+      await connectSocket(token);
+
       //valida o token na api e pega dados atualizados do user
       const response = await api.get<IUser>("/auth/me");
 
@@ -75,6 +77,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     await AsyncStorage.setItem("@user:stackchat", JSON.stringify(userData));
 
     setUser(userData);
+    await connectSocket(token);
 
     return message;
   }
@@ -83,6 +86,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     await AsyncStorage.removeItem("@token:stackchat");
     await AsyncStorage.removeItem("@user:stackchat");
     setUser(null);
+    await disconnectSocket();
   }
 
   return (
