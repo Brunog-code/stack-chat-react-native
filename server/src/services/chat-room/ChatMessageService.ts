@@ -9,8 +9,6 @@ interface ICreateMessageProps {
 
 export class ChatMessageService {
   async createMessage({ roomId, userId, type, content }: ICreateMessageProps) {
-    await this.isUserInRoom({ roomId, userId });
-
     const messageCreated = await prisma.message.create({
       data: {
         chatRoomId: roomId,
@@ -28,6 +26,7 @@ export class ChatMessageService {
         },
       },
     });
+    console.log(messageCreated);
 
     return messageCreated;
   }
@@ -44,5 +43,17 @@ export class ChatMessageService {
     });
 
     if (!userInRoom) throw new Error("Usuário não pertence ao chat");
+  }
+
+  async getRoomMembers(roomId: string) {
+    const members = await prisma.chatMember.findMany({
+      where: {
+        chatRoomId: roomId,
+      },
+      select: {
+        userId: true,
+      },
+    });
+    return members;
   }
 }

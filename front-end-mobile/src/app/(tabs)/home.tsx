@@ -12,6 +12,7 @@ import { ChatCard } from "@/src/components/ChatRoomCard";
 import { useAuth } from "@/src/contexts/auth-context";
 import { useRouter } from "expo-router";
 import { LoadingSpinner } from "@/src/components/LoadingSpinner";
+import { getSocket } from "@/src/lib/socket";
 
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
@@ -20,13 +21,24 @@ export default function HomeScreen() {
 
   const { user } = useAuth();
 
+  const socket = getSocket();
+
   const [loadingFetchDataRooms, setLoadingFetchDataRooms] =
     useState<boolean>(true);
   const [roomData, setRoomsData] = useState<IResponseDataRooms[] | null>(null);
 
   useEffect(() => {
-    fetchRoomsData();
+    socket.on("room_updated", handleRoomUpdated);
+
+    return () => {
+      socket.off("room_updated", handleRoomUpdated);
+    };
   }, []);
+
+  useEffect(() => {
+    if (!user?.id) return;
+    fetchRoomsData();
+  }, [user]);
 
   async function fetchRoomsData() {
     try {
@@ -48,7 +60,7 @@ export default function HomeScreen() {
   }
 
   if (loadingFetchDataRooms) {
-    <LoadingSpinner />;
+    return <LoadingSpinner />;
   }
 
   function handleOpenRoom(id: string, name: string, image: string) {
@@ -58,13 +70,57 @@ export default function HomeScreen() {
     });
   }
 
+  async function handleRoomUpdated(data: {
+    roomId: string;
+    lastMessage: string;
+    messageType: string;
+    createdAt: string;
+    name: string;
+  }) {
+    setRoomsData((prev) => {
+      if (!prev) return prev;
+
+      const updatedRooms = prev.map((room) => {
+        if (room.id === data.roomId) {
+          return {
+            ...room,
+            unreadCount: room.unreadCount + 1,
+            messages: [
+              {
+                ...room.messages[0],
+                content:
+                  data.messageType == "text"
+                    ? data.lastMessage
+                    : "Arquivo de mídia",
+                createdAt: data.createdAt,
+                user: {
+                  ...room.messages[0].user,
+                  name: data.name,
+                },
+              },
+            ],
+          };
+        }
+        return room;
+      });
+
+      return updatedRooms;
+
+      // move pro topo
+      // return updateRooms.sort(
+      //   (a, b) =>
+      //     new Date(b.messages[0]?.createdAt).getTime() -
+      //     new Date(a.messages[0]?.createdAt).getTime(),
+      // );
+    });
+  }
+
   return (
     <View
       className="flex-1 "
       style={{
         backgroundColor: theme.colors.background,
         paddingTop: insets.top,
-        // paddingBottom: insets.bottom,
         paddingLeft: insets.left + 10,
         paddingRight: insets.right + 10,
       }}

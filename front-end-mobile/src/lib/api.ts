@@ -4,9 +4,9 @@ import axios from "axios";
 export const api = axios.create({
   baseURL: "http://192.168.3.135:3333",
   timeout: 12000,
-  headers: {
-    "Content-Type": "application/json",
-  },
+  // headers: {
+  //   "Content-Type": "application/json",
+  // },
 });
 
 //interceptor para add o token em toda req

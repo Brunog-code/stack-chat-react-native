@@ -29,7 +29,7 @@ export class ChatRoomService {
       },
     });
 
-    // Conta mensagens não lidas por sala
+    //Conta mensagens não lidas por sala
     const roonsWithUnread = await Promise.all(
       roomsData.map(async (room) => {
         const member = room.members[0];

@@ -7,16 +7,31 @@ export class ChatSocket {
   ) {}
 
   public initialize() {
-    this.io.on("connection", (socket: Socket) => {
+    this.io.on("connection", async (socket: Socket) => {
       console.log("User connected:", socket.id);
+
+      const userId = socket.data.userId;
+
+      // entra na sala do usuário para notificações da Home
+      socket.join(userId);
 
       this.registerEvents(socket);
     });
   }
 
   private registerEvents(socket: Socket) {
-    socket.on("join_room", this.handleJoinRoom(socket));
-    socket.on("send_message", this.handleSendMessage(socket));
+    socket.on("join_room", (roomId: string) =>
+      this.handleJoinRoom(socket)(roomId),
+    );
+
+    socket.on("leave_room", (roomId: string) => {
+      socket.leave(roomId);
+    });
+
+    socket.on("send_message", (data: any) =>
+      this.handleSendMessage(socket)(data),
+    );
+    
     socket.on("disconnect", () => {
       console.log("User disconnected:", socket.id);
     });
@@ -44,6 +59,12 @@ export class ChatSocket {
     return async (data: any) => {
       const { roomId, type, content, tempId } = data;
 
+      // Debug: Quantas pessoas estão ouvindo nesta sala agora?
+      const connectedSockets = await this.io.in(roomId).fetchSockets();
+      console.log(
+        `Sala ${roomId} tem ${connectedSockets.length} usuários conectados.`,
+      );
+
       const userId = socket.data.userId;
 
       try {
@@ -52,6 +73,7 @@ export class ChatSocket {
           roomId,
           userId,
         });
+
         const savedMessage = await this.chatMessageService.createMessage({
           roomId,
           userId,
@@ -59,9 +81,24 @@ export class ChatSocket {
           content,
         });
 
+        //Atualiza quem está dentro da sala - envia a mensagem para todos os usuários que deram socket.join(roomId)
         this.io.to(roomId).emit("receive_message", {
           ...savedMessage,
           tempId,
+        });
+
+        //Atualiza Home dos membros
+        const members = await this.chatMessageService.getRoomMembers(roomId);
+
+        //emito um evento enviando a mensagem criada
+        members.forEach(({ userId }) => {
+          this.io.to(userId).emit("room_updated", {
+            roomId,
+            messageType: savedMessage.messageType,
+            lastMessage: savedMessage.content,
+            createdAt: savedMessage.createdAt,
+            name: savedMessage.user.name,
+          });
         });
       } catch (error) {
         socket.emit("message_error", {

@@ -2,6 +2,7 @@ import { Image, Text, View } from "react-native";
 import { theme } from "../constants/theme";
 import { stringToColor } from "../utils/string-to-color";
 import { Video, ResizeMode } from "expo-av";
+import avatarUser from "../../assets/images/avatar-user.png";
 
 interface IChatMessageCardProps {
   mediaUrl: string | null;
@@ -20,7 +21,7 @@ export const ChatMessageCard = ({
   message,
   name,
   role,
-  messageType
+  messageType,
 }: IChatMessageCardProps) => {
   const isMe = role === "me";
   const time = new Date(createdAt).toLocaleTimeString("pt-br", {
@@ -29,7 +30,7 @@ export const ChatMessageCard = ({
   });
 
   const nameColor = stringToColor(name);
-  
+
   return (
     <View
       style={{
@@ -40,12 +41,11 @@ export const ChatMessageCard = ({
         marginVertical: 6,
         gap: 4,
         width: "90%",
-
       }}
     >
       {/* Avatar */}
       <Image
-        source={{ uri: imageUser ?? "https://via.placeholder.com/40" }}
+        source={imageUser ? { uri: imageUser } : avatarUser}
         style={{ width: 44, height: 44, borderRadius: 22 }}
       />
 
@@ -105,7 +105,6 @@ export const ChatMessageCard = ({
           />
         )}
       </View>
-
     </View>
   );
 };

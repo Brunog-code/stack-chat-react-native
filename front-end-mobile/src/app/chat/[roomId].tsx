@@ -54,7 +54,10 @@ export default function ChatRoom() {
 
   const insets = useSafeAreaInsets();
 
+  //refs
   const flatListRef = useRef<FlatList<IMessage>>(null);
+  const shouldScrollToBottom = useRef(false);
+  const didInitialScroll = useRef(false);
 
   const [loadingMessages, setLoadingMessages] = useState<boolean>(true);
   const [messages, setMessages] = useState<IMessage[]>([]);
@@ -90,16 +93,29 @@ export default function ChatRoom() {
   useEffect(() => {
     if (!roomId) return;
 
-    //entra na 'sala'
-    socket.emit("join_room", roomId);
+    // Função para garantir que estamos na sala
+    const joinRoom = () => {
+      socket.emit("join_room", roomId);
+    };
+
+    // 1. Tenta entrar imediatamente
+    if (socket.connected) {
+      joinRoom();
+    }
+
+    // 2. Se o socket cair e voltar (reconnect), entra na sala de novo automaticamente
+    socket.on("connect", joinRoom);
 
     //quando recebe mensagem
     function handleReceiveMessage(message: IMessage & { tempId?: string }) {
       setMessages((prev) => {
-        //se for mensagem temporária (imagem enviando)
-        if (message.tempId) {
+        //só substitui temporária se ela existir na lista (ou seja, foi criada por mim)
+        const tempExists =
+          message.tempId && prev.some((msg) => msg.id === message.tempId);
+
+        if (tempExists) {
           return prev.map((msg) =>
-            msg.id === message.tempId ? { ...msg, sending: false } : msg,
+            msg.id === message.tempId ? { ...message, sending: false } : msg,
           );
         }
 
@@ -131,6 +147,8 @@ export default function ChatRoom() {
     socket.on("message_error", handleMessageError);
 
     return () => {
+      socket.emit("leave_room", roomId);
+      socket.off("connect", joinRoom);
       socket.off("receive_message", handleReceiveMessage);
       socket.off("join_error", handleJoinError);
       socket.off("message_error", handleMessageError);
@@ -139,7 +157,8 @@ export default function ChatRoom() {
 
   //rolar até a ultima mensagem lida
   useEffect(() => {
-    if (!lastReadMessageId || messages.length === 0) return;
+    if (didInitialScroll.current || !lastReadMessageId || messages.length === 0)
+      return;
 
     const index = messages.findIndex((msg) => msg.id === lastReadMessageId);
 
@@ -148,6 +167,7 @@ export default function ChatRoom() {
         index,
         animated: true,
       });
+      didInitialScroll.current = true;
     }
   }, [messages, lastReadMessageId]);
 
@@ -192,13 +212,15 @@ export default function ChatRoom() {
       userId: user!.id,
       imageUrl: "",
       messageType: "text",
-      content: "",
+      content: messageInput,
       createdAt: new Date().toISOString(),
       user: {
         name: user!.name,
       },
       sending: true,
     };
+
+    shouldScrollToBottom.current = true;
 
     setMessages((prev) => [tempMessage, ...prev]);
 
@@ -208,6 +230,8 @@ export default function ChatRoom() {
       content: messageInput,
       tempId: tempMessage.id,
     });
+
+    setMessageInput("");
   }
 
   async function handlePickImage() {
@@ -271,7 +295,11 @@ export default function ChatRoom() {
       } as any);
 
       //chamar api para upload
-      const response = await api.post("/upload", formData);
+      const response = await api.post("/upload", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       const fileUrl = response.data.url;
 
@@ -305,6 +333,16 @@ export default function ChatRoom() {
       <FlatList
         data={messages}
         inverted
+        onContentSizeChange={() => {
+          if (shouldScrollToBottom.current) {
+            flatListRef.current?.scrollToOffset({
+              offset: 0,
+              animated: true,
+            });
+
+            shouldScrollToBottom.current = false;
+          }
+        }}
         style={{ flex: 1 }}
         ref={flatListRef}
         keyboardShouldPersistTaps="handled"

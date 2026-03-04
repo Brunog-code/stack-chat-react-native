@@ -27,7 +27,7 @@ export interface IResponseDataRooms {
   createdAt: string;
   updatedAt: string;
 
-  // Últimas mensagens (ou mensagens retornadas)
+  //ultima Mensagem
   messages: {
     id: string;
     chatRoomId: string;
@@ -40,7 +40,6 @@ export interface IResponseDataRooms {
     user: {
       id: string;
       name: string;
-      email: string;
       image?: string | null;
       createdAt: string;
       updatedAt: string;

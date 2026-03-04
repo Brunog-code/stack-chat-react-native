@@ -35,6 +35,20 @@ export class UserService {
       },
     });
 
+    //buscar todas as salas
+    const rooms = await prisma.chatRoom.findMany({
+      select: { id: true },
+    });
+
+    //incluir o user
+    await prisma.chatMember.createMany({
+      data: rooms.map((room) => ({
+        userId: user.id,
+        chatRoomId: room.id,
+        role: 'member'
+      })),
+    });
+
     return user;
   };
 }
