@@ -45,7 +45,8 @@ export class UserService {
       data: rooms.map((room) => ({
         userId: user.id,
         chatRoomId: room.id,
-        role: 'member'
+        role: "member",
+        lastReadAt: null,
       })),
     });
 

@@ -165,7 +165,7 @@ export default function ChatRoom() {
     if (index !== -1) {
       flatListRef.current?.scrollToIndex({
         index,
-        animated: true,
+        animated: false,
       });
       didInitialScroll.current = true;
     }
@@ -318,6 +318,48 @@ export default function ChatRoom() {
     }
   }
 
+  //marcar como lida a mensagem
+  const lastSentReadRef = useRef<string | null>(null);
+  const debounceTimeoutRef = useRef<NodeJS.Timeout | null | number>(null);
+
+  const onViewableItemsChanged = useRef(({ viewableItems }: any) => {
+    if (!viewableItems.length) return;
+
+    //pega os itens visíveis
+    const visibleMessages = viewableItems
+      .map((v: any) => v.item)
+      //ignora mensagens enviadas por mim
+      .filter((msg: IMessage) => msg.userId !== user?.id);
+
+    if (visibleMessages.length === 0) return;
+
+    //como a lista é inverted, pega a MAIS RECENTE visível
+    const newestVisible = visibleMessages.reduce(
+      (latest: any, current: any) => {
+        const latestDate = new Date(latest.createdAt).getTime();
+        const currentDate = new Date(current.createdAt).getTime();
+        return currentDate > latestDate ? current : latest;
+      },
+    );
+
+    const newDate = new Date(newestVisible.createdAt).toISOString();
+
+    if (lastSentReadRef.current === newDate) return;
+
+    if (debounceTimeoutRef.current) {
+      clearTimeout(debounceTimeoutRef.current);
+    }
+
+    debounceTimeoutRef.current = setTimeout(() => {
+      lastSentReadRef.current = newDate;
+
+      socket.emit("mark_as_read", {
+        roomId,
+        lastReadAt: newDate,
+      });
+    }, 400);
+  }).current;
+
   if (loadingMessages) {
     return <LoadingSpinner />;
   }
@@ -333,6 +375,8 @@ export default function ChatRoom() {
       <FlatList
         data={messages}
         inverted
+        onViewableItemsChanged={onViewableItemsChanged} //O React Native começa a monitorar quais itens estão visíveis na tela.
+        viewabilityConfig={{ itemVisiblePercentThreshold: 50 }}
         onContentSizeChange={() => {
           if (shouldScrollToBottom.current) {
             flatListRef.current?.scrollToOffset({

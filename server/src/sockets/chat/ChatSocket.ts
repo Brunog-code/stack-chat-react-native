@@ -1,5 +1,6 @@
 import { Server, Socket } from "socket.io";
 import { ChatMessageService } from "../../services/chat-room/ChatMessageService.js";
+import prisma from "../../lib/prisma.js";
 export class ChatSocket {
   constructor(
     private readonly io: Server,
@@ -31,7 +32,11 @@ export class ChatSocket {
     socket.on("send_message", (data: any) =>
       this.handleSendMessage(socket)(data),
     );
-    
+
+    socket.on("mark_as_read", (data: any) =>
+      this.handleSaveLastMessageRead(socket)(data),
+    );
+
     socket.on("disconnect", () => {
       console.log("User disconnected:", socket.id);
     });
@@ -81,6 +86,14 @@ export class ChatSocket {
           content,
         });
 
+        //atualiza lastMessageRead
+        const lastMessageReadString = new Date();
+        await this.chatMessageService.updateLastMessageRead(
+          roomId,
+          userId,
+          lastMessageReadString,
+        );
+
         //Atualiza quem está dentro da sala - envia a mensagem para todos os usuários que deram socket.join(roomId)
         this.io.to(roomId).emit("receive_message", {
           ...savedMessage,
@@ -106,6 +119,26 @@ export class ChatSocket {
           error: "Erro ao enviar mensagem",
         });
       }
+    };
+  }
+
+  private handleSaveLastMessageRead(socket: Socket) {
+    return async (data: any) => {
+      const { roomId, lastReadAt } = data;
+      const userId = socket.data.userId;
+
+      const dateObj = new Date(lastReadAt); //garante tipo Date
+
+      const result = await this.chatMessageService.updateLastMessageRead(
+        roomId,
+        userId,
+        dateObj,
+      );
+
+      //atualiza COUNT message unread depois que ele leu e HOME escuta
+      this.io.to(userId).emit("update_read_message", {
+        result,
+      });
     };
   }
 }

@@ -72,10 +72,20 @@ export interface IMessage {
     name: string;
     image?: string | null;
   };
-  sending?: boolean; // 👈 para optimistic update
+  sending?: boolean; 
 }
 
 export interface IResponseMessageRoom {
   messages: IMessage[];
   lastReadMessageId: string;
+}
+
+export interface IResponseSearchRooms {
+  id: string;
+  name: string;
+  description: string;
+  image: string;
+  isPrivate: boolean;
+  createdAt: string;
+  updatedAt: string;
 }

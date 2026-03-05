@@ -1,6 +1,6 @@
 import { Logo } from "@/src/components/Logo";
 import { theme } from "@/src/constants/theme";
-import { View, Text, FlatList } from "react-native";
+import { View, Text, FlatList, Pressable } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Feather from "@expo/vector-icons/Feather";
 import { useEffect, useState } from "react";
@@ -127,13 +127,16 @@ export default function HomeScreen() {
     >
       <View className="flex-row justify-between items-center">
         <Logo sizeImg={60} sizeText={32} />
-        <Feather name="search" size={32} color={theme.colors.text} />
+        <Pressable onPress={() => router.push("/search/search")}>
+          <Feather name="search" size={32} color={theme.colors.text} />
+        </Pressable>
       </View>
 
       <View className="flex-1 mt-6">
         <FlatList
           data={roomData}
           keyExtractor={(item) => item.id}
+          showsVerticalScrollIndicator={false}
           renderItem={({ item }) => (
             <ChatCard
               img={item.image}

@@ -2,6 +2,14 @@ import prisma from "../../src/lib/prisma.js";
 import { faker } from "@faker-js/faker"; // npm i @faker-js/faker
 
 async function main() {
+  // Limpa tudo na ordem correta (dependências primeiro)
+  await prisma.message.deleteMany({});
+  await prisma.chatMember.deleteMany({});
+  await prisma.chatRoom.deleteMany({});
+  await prisma.user.deleteMany({});
+
+  console.log("Banco limpo!");
+
   // 1️⃣ Criar usuários
   const usersData = [];
   for (let i = 1; i <= 10; i++) {
@@ -107,7 +115,7 @@ async function main() {
           userId: users[i].id,
           chatRoomId: room.id,
           role: "member",
-          lastReadAt: isLastUser ? null : new Date(),
+          lastReadAt: null,
         },
       });
     }

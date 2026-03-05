@@ -26,7 +26,6 @@ export class ChatMessageService {
         },
       },
     });
-    console.log(messageCreated);
 
     return messageCreated;
   }
@@ -55,5 +54,46 @@ export class ChatMessageService {
       },
     });
     return members;
+  }
+
+  async updateLastMessageRead(
+    roomId: string,
+    userId: string,
+    lastReadAt: Date,
+  ) {
+    const member = await prisma.chatMember.findFirst({
+      where: {
+        userId,
+        chatRoomId: roomId,
+      },
+      select: {
+        lastReadAt: true,
+        id: true,
+      },
+    });
+
+    if (!member) throw new Error("Membro não pertence a sala");
+
+    if (member.lastReadAt !== null && member.lastReadAt >= lastReadAt) return;
+
+    //update dateTime las message read
+    await prisma.chatMember.update({
+      where: {
+        id: member.id,
+      },
+      data: {
+        lastReadAt,
+      },
+    });
+
+    const unreadCount = await prisma.message.count({
+      where: {
+        chatRoomId: roomId,
+        createdAt: { gt: lastReadAt },
+        userId: { not: userId }, // ignora mensagens do próprio usuário
+      },
+    });
+
+    return unreadCount;
   }
 }

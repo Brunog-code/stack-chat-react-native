@@ -35,6 +35,8 @@ export class ChatRoomService {
         const member = room.members[0];
         const lastReadAt = member?.lastReadAt ?? new Date(0); //se nunca leu, conta tudo
 
+        console.log('ultima lida qtde ', lastReadAt);
+
         const unreadCount = await prisma.message.count({
           where: {
             chatRoomId: room.id,
