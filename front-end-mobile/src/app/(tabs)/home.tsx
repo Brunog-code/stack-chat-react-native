@@ -36,6 +36,14 @@ export default function HomeScreen() {
   }, []);
 
   useEffect(() => {
+    socket.on("update_read_message", handleUpdateAcountMessageNotRead);
+
+    return () => {
+      socket.off("update_read_message", handleUpdateAcountMessageNotRead);
+    };
+  }, []);
+
+  useEffect(() => {
     if (!user?.id) return;
     fetchRoomsData();
   }, [user]);
@@ -112,6 +120,28 @@ export default function HomeScreen() {
       //     new Date(b.messages[0]?.createdAt).getTime() -
       //     new Date(a.messages[0]?.createdAt).getTime(),
       // );
+    });
+  }
+
+  async function handleUpdateAcountMessageNotRead(data: {
+    result: number;
+    roomId: string;
+    userId: string;
+  }) {
+    setRoomsData((prev) => {
+      if (!prev) return prev;
+
+      const updatedRooms = prev.map((room) => {
+        if (room.id === data.roomId) {
+          return {
+            ...room,
+            unreadCount: data.result,
+          };
+        }
+        return room;
+      });
+
+      return updatedRooms;
     });
   }
 

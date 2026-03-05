@@ -138,6 +138,8 @@ export class ChatSocket {
       //atualiza COUNT message unread depois que ele leu e HOME escuta
       this.io.to(userId).emit("update_read_message", {
         result,
+        roomId,
+        userId,
       });
     };
   }

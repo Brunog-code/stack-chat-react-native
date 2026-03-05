@@ -90,7 +90,7 @@ export class ChatMessageService {
       where: {
         chatRoomId: roomId,
         createdAt: { gt: lastReadAt },
-        userId: { not: userId }, // ignora mensagens do próprio usuário
+        userId: { not: userId }, //ignora mensagens do próprio usuário
       },
     });
 

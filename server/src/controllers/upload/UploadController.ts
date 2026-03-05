@@ -8,8 +8,6 @@ export class UploadController {
     try {
       const file = req.file;
 
-      console.log(file);
-
       if (!file) throw new Error("Arquivo não enviado");
 
       const fileUrl = await this.uploadService.uploadFile({ file });

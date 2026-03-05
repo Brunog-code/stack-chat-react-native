@@ -157,8 +157,14 @@ export default function ChatRoom() {
 
   //rolar até a ultima mensagem lida
   useEffect(() => {
-    if (didInitialScroll.current || !lastReadMessageId || messages.length === 0)
+    if (didInitialScroll.current || messages.length === 0) return;
+
+    // Se não há lastReadMessageId, libera direto (já está no topo/mais recente)
+    if (!lastReadMessageId) {
+      didInitialScroll.current = true;
+
       return;
+    }
 
     const index = messages.findIndex((msg) => msg.id === lastReadMessageId);
 
@@ -167,7 +173,11 @@ export default function ChatRoom() {
         index,
         animated: false,
       });
-      didInitialScroll.current = true;
+
+      //habilita leitura
+      setTimeout(() => {
+        didInitialScroll.current = true;
+      }, 300);
     }
   }, [messages, lastReadMessageId]);
 
@@ -323,6 +333,8 @@ export default function ChatRoom() {
   const debounceTimeoutRef = useRef<NodeJS.Timeout | null | number>(null);
 
   const onViewableItemsChanged = useRef(({ viewableItems }: any) => {
+    if (!didInitialScroll.current) return; // 🔴 BLOQUEIA
+
     if (!viewableItems.length) return;
 
     //pega os itens visíveis

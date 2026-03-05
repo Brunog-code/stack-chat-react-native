@@ -11,6 +11,7 @@ interface AuthProviderProps {
 interface AuthContextData {
   user: IUser | null;
   loadingUser: boolean;
+  setUser: React.Dispatch<React.SetStateAction<IUser | null>>;
   login: (email: string, password: string) => Promise<string>;
   logout: () => Promise<void>;
 }
@@ -90,7 +91,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   return (
-    <AuthContext value={{ user, login, logout, loadingUser }}>
+    <AuthContext value={{ user, login, logout, loadingUser, setUser }}>
       {children}
     </AuthContext>
   );

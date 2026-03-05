@@ -31,4 +31,46 @@ export class UserController {
       });
     }
   };
+
+  updateName = async (req: Request, res: Response) => {
+    const id = req.params.id as string;
+    const { name } = req.body;
+
+    try {
+      const result = await this.userService.updateName(id, name);
+
+      return res.status(200).json(result);
+    } catch (error) {
+      if (error instanceof Error) {
+        return res.status(400).json({
+          error: error.message,
+        });
+      }
+
+      return res.status(500).json({
+        error: "Erro interno do servidor",
+      });
+    }
+  };
+
+  updateImage = async (req: Request, res: Response) => {
+    const id = req.params.id as string;
+    const { urlImage } = req.body;
+
+    try {
+      await this.userService.updateImage(id, urlImage);
+
+      return res.status(200).json({ message: "Imagem alterada" });
+    } catch (error) {
+      if (error instanceof Error) {
+        return res.status(400).json({
+          error: error.message,
+        });
+      }
+
+      return res.status(500).json({
+        error: "Erro interno do servidor",
+      });
+    }
+  };
 }

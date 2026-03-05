@@ -40,6 +40,7 @@ export default function RootLayout() {
           <Stack.Screen name="(tabs)" />
           <Stack.Screen name="chat/[roomId]" />
           <Stack.Screen name="search/search" />
+          <Stack.Screen name="change-name/change-name" />
         </Stack>
         <Toast />
       </SafeAreaProvider>

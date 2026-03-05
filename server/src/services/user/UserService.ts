@@ -52,4 +52,44 @@ export class UserService {
 
     return user;
   };
+
+  updateName = async (id: string, name: string) => {
+    const user = await prisma.user.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!user) throw new Error("Usuário não encontrado");
+
+    const nameSaved = await prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        name,
+      },
+    });
+
+    return nameSaved;
+  };
+
+  updateImage = async (id: string, urlImage: string) => {
+    const user = await prisma.user.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!user) throw new Error("Usuário não encontrado");
+
+    await prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        image: urlImage,
+      },
+    });
+  };
 }
