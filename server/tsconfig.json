@@ -23,23 +23,17 @@
 
 {
   "$schema": "https://www.schemastore.org/tsconfig",
-  "_version": "24.0.0",
-
   "compilerOptions": {
     "lib": ["es2024"],
     "module": "CommonJS",
-    "target": "es2024",
+    "target": "ES2020",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "moduleResolution": "node",
     "outDir": "./dist",
-    // Removemos o rootDir fixo ou apontamos para a raiz do projeto
-    "baseUrl": ".",
-    "paths": {
-      "@prisma/client": ["./generated/prisma/client"]
-    }
+    "baseUrl": "."
   },
-  "include": ["src/**/*", "generated/**/*"], // Incluímos a pasta gerada aqui
+  "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
 }
