@@ -25,5 +25,5 @@ const chatSocket = new ChatSocket(io, chatMessageService);
 chatSocket.initialize();
 
 //iniciando server
-const PORT = 3333;
+const PORT = 3334;
 server.listen(PORT, () => console.log(`server is running at port ${PORT}`));

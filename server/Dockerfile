@@ -27,7 +27,7 @@ COPY . .
 RUN npm run build
 
 # O Socket.io e o Express precisam de portas abertas
-EXPOSE 3333
+EXPOSE 3334
 
 # Rodar o servidor
 # Se você usa TS, o comando geralmente é "node dist/server.js"

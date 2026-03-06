@@ -4,7 +4,7 @@ let socket: Socket;
 
 export function getSocket() {
   if (!socket) {
-    socket = io("http://192.168.3.135:3333", {
+    socket = io("http://192.168.3.135:3334", {
       autoConnect: false,
     });
   }
