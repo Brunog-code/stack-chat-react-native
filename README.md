@@ -18,48 +18,48 @@ Este projeto foi construído utilizando uma stack moderna voltada para **aplica�
 
 ## 📱 Mobile
 
-| Tecnologia | Badge |
-| :--------------- | :--------------------------------------------------------------------------------------------------------------------------- |
-| **React Native** | ![React Native](https://img.shields.io/badge/React_Native-20232A?style=flat-square&logo=react&logoColor=61DAFB) |
-| **TypeScript** | ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat-square&logo=typescript&logoColor=white) |
+| Tecnologia             | Badge                                                                                                                      |
+| :--------------------- | :------------------------------------------------------------------------------------------------------------------------- |
+| **React Native**       | ![React Native](https://img.shields.io/badge/React_Native-20232A?style=flat-square&logo=react&logoColor=61DAFB)            |
+| **TypeScript**         | ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat-square&logo=typescript&logoColor=white)            |
 | **React Native Paper** | ![React Native Paper](https://img.shields.io/badge/React_Native_Paper-6200EE?style=flat-square&logo=react&logoColor=white) |
 
 ---
 
 ## ⚙️ Backend
 
-| Tecnologia | Badge |
-| :--------------- | :--------------------------------------------------------------------------------------------------------------------------- |
-| **Node.js** | ![Node.js](https://img.shields.io/badge/Node.js-339933?style=flat-square&logo=nodedotjs&logoColor=white) |
-| **Socket.IO** | ![Socket.IO](https://img.shields.io/badge/Socket.IO-010101?style=flat-square&logo=socketdotio&logoColor=white) |
-| **Prisma ORM** | ![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=flat-square&logo=Prisma&logoColor=white) |
+| Tecnologia     | Badge                                                                                                          |
+| :------------- | :------------------------------------------------------------------------------------------------------------- |
+| **Node.js**    | ![Node.js](https://img.shields.io/badge/Node.js-339933?style=flat-square&logo=nodedotjs&logoColor=white)       |
+| **Socket.IO**  | ![Socket.IO](https://img.shields.io/badge/Socket.IO-010101?style=flat-square&logo=socketdotio&logoColor=white) |
+| **Prisma ORM** | ![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=flat-square&logo=Prisma&logoColor=white)            |
 
 ---
 
 ## 🗄️ Banco de Dados
 
-| Tecnologia | Badge |
-| :--------------- | :--------------------------------------------------------------------------------------------------------------------------- |
+| Tecnologia  | Badge                                                                                                  |
+| :---------- | :----------------------------------------------------------------------------------------------------- |
 | **MongoDB** | ![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=flat-square&logo=mongodb&logoColor=white) |
 
 ---
 
 ## 🛡️ Autenticação & Validação
 
-| Tecnologia | Badge |
-| :--------------- | :--------------------------------------------------------------------------------------------------------------------------- |
+| Tecnologia               | Badge                                                                                                |
+| :----------------------- | :--------------------------------------------------------------------------------------------------- |
 | **JWT (JSON Web Token)** | ![JWT](https://img.shields.io/badge/JWT-000000?style=flat-square&logo=jsonwebtokens&logoColor=white) |
-| **Zod** | ![Zod](https://img.shields.io/badge/Zod-3E67B1?style=flat-square&logo=typescript&logoColor=white) |
+| **Zod**                  | ![Zod](https://img.shields.io/badge/Zod-3E67B1?style=flat-square&logo=typescript&logoColor=white)    |
 
 ---
 
 # 🛠️ Ferramentas e Infraestrutura
 
-- **Editor de Código:** Visual Studio Code  
-- **Controle de Versão:** Git & GitHub  
-- **Containerização:** Docker  
-- **Hospedagem do Servidor:** VPS  
-- **Comunicação em Tempo Real:** WebSockets via Socket.IO  
+- **Editor de Código:** Visual Studio Code
+- **Controle de Versão:** Git & GitHub
+- **Containerização:** Docker
+- **Hospedagem do Servidor:** VPS
+- **Comunicação em Tempo Real:** WebSockets via Socket.IO
 
 ---
 
@@ -158,12 +158,15 @@ O backend segue uma **arquitetura em camadas**, separando responsabilidades e fa
 Descrição das camadas:
 
 **Routes**
+
 - Responsáveis por definir os endpoints da API.
 
 **Controllers**
+
 - Recebem as requisições HTTP e delegam as regras de negócio.
 
 **Services**
+
 - Contêm a lógica principal da aplicação.
 
 Essa separação torna o código **mais organizado, testável e escalável**.
@@ -182,6 +185,24 @@ Benefícios:
 - Escalabilidade em servidores
 
 O deploy do servidor foi realizado em uma **VPS**, permitindo controle total da infraestrutura.
+
+---
+
+## 📸 Visualização
+
+### Página Inicial
+
+![Pagina Login](https://res.cloudinary.com/dcxpgtvqf/image/upload/v1772829784/thumbnail-2_fayuxr.png)
+
+![Register](https://res.cloudinary.com/dcxpgtvqf/image/upload/v1772829783/register_l1q0nl.png)
+
+![Home](https://res.cloudinary.com/dcxpgtvqf/image/upload/v1772829783/home_aynzw8.png)
+
+![Chat](https://res.cloudinary.com/dcxpgtvqf/image/upload/v1772829783/chat_flbovh.png)
+
+![Search](https://res.cloudinary.com/dcxpgtvqf/image/upload/v1772829783/search_rvv7ky.png)
+
+![Perfil](https://res.cloudinary.com/dcxpgtvqf/image/upload/v1772829783/perfil_nvkrtt.png)
 
 ---
 
