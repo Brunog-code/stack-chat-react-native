@@ -1,4 +1,4 @@
-# 💬 DevChat - Chat em Tempo Real para Desenvolvedores
+# 💬 StackChat - Aplicativo de Chat em Tempo Real para Desenvolvedores
 
 👉 **[Acesse o repositório aqui](https://github.com/seu-usuario/devchat)**
 
