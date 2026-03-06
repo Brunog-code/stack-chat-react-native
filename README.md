@@ -118,6 +118,23 @@ Esse modelo torna o sistema mais preparado para crescimento futuro.
 
 ---
 
+
+
+## ☁️ Upload e Armazenamento de Mídia com Cloudinary
+
+Para o armazenamento de imagens do aplicativo foi utilizado o **Cloudinary**, uma plataforma especializada em gerenciamento de mídia na nuvem.
+
+Principais vantagens:
+
+- **Upload seguro de imagens**
+- **Armazenamento escalável na nuvem**
+- **Entrega otimizada de imagens**
+- **Redução de carga no servidor**
+
+Com isso, o backend não precisa armazenar arquivos diretamente, apenas salvar as **URLs das imagens**, tornando a aplicação mais leve e escalável.
+
+---
+
 ## 📱 Interface Mobile com React Native
 
 O frontend foi desenvolvido utilizando **React Native com TypeScript**, focando em:
