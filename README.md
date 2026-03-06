@@ -204,6 +204,8 @@ O deploy do servidor foi realizado em uma **VPS**, permitindo controle total da 
 
 ![Perfil](https://res.cloudinary.com/dcxpgtvqf/image/upload/v1772829783/perfil_nvkrtt.png)
 
+![Change Name](https://res.cloudinary.com/dcxpgtvqf/image/upload/v1772830334/change-name_jed1mo.png)
+
 ---
 
 # 🎯 Objetivo do Projeto
