@@ -192,19 +192,29 @@ O deploy do servidor foi realizado em uma **VPS**, permitindo controle total da 
 
 ### Página Inicial
 
+### Login
 ![Pagina Login](https://res.cloudinary.com/dcxpgtvqf/image/upload/v1772829784/thumbnail-2_fayuxr.png)
 
+### Registrar
 ![Register](https://res.cloudinary.com/dcxpgtvqf/image/upload/v1772829783/register_l1q0nl.png)
 
+### Home
 ![Home](https://res.cloudinary.com/dcxpgtvqf/image/upload/v1772829783/home_aynzw8.png)
 
+### Sala de chat
 ![Chat](https://res.cloudinary.com/dcxpgtvqf/image/upload/v1772829783/chat_flbovh.png)
 
+### Buscar grupo
 ![Search](https://res.cloudinary.com/dcxpgtvqf/image/upload/v1772829783/search_rvv7ky.png)
 
+### Perfil
 ![Perfil](https://res.cloudinary.com/dcxpgtvqf/image/upload/v1772829783/perfil_nvkrtt.png)
 
+### Alterar nome
 ![Change Name](https://res.cloudinary.com/dcxpgtvqf/image/upload/v1772830334/change-name_jed1mo.png)
+
+### Protótipo Figma
+![Protótipo Figma](https://res.cloudinary.com/dcxpgtvqf/image/upload/v1772830477/figma_afacje.png)
 
 ---
 
