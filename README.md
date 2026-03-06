@@ -1,6 +1,6 @@
 # 💬 StackChat - Aplicativo de Chat em Tempo Real para Desenvolvedores
 
-👉 **[Acesse o repositório aqui](https://github.com/seu-usuario/devchat)**
+👉 **[Download do APK aqui](https://github.com/Brunog-code/stack-chat-react-native/releases/download/v1.0.0/stack-chat-v1.0.0.zip)** (Android - descompacte e instale o .apk)
 
 O **Stack Chat** é uma aplicação de chat em tempo real desenvolvida para conectar desenvolvedores em um ambiente simples, rápido e escalável. O projeto foi criado com o objetivo de **explorar o desenvolvimento mobile com React Native** e implementar comunicação **em tempo real utilizando WebSockets com Socket.IO**.
 
