@@ -1,0 +1,11 @@
+services:
+  chat-api:
+    build:
+      context: .          # Agora o contexto é a própria pasta onde o compose está
+      dockerfile: Dockerfile
+    container_name: stack-chat-backend
+    restart: always
+    ports:
+      - "3333:3333"
+    env_file:
+      - .env              # O .env também está na mesma pasta agora
