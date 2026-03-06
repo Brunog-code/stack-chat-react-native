@@ -4,7 +4,7 @@ let socket: Socket;
 
 export function getSocket() {
   if (!socket) {
-    socket = io("http://192.168.3.135:3334", {
+    socket = io(process.env.EXPO_PUBLIC_BASE_URL as string, {
       autoConnect: false,
     });
   }
