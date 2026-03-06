@@ -1,9 +1,9 @@
 import { createServer } from "node:http";
 import { Server } from "socket.io";
-import app from "./app.js";
-import { ChatMessageService } from "./services/chat-room/ChatMessageService.js";
-import { ChatSocket } from "./sockets/chat/ChatSocket.js";
-import { socketAuthMiddleware } from "./middlewares/socket-auth-middleware.js";
+import app from "./app";
+import { ChatMessageService } from "./services/chat-room/ChatMessageService";
+import { ChatSocket } from "./sockets/chat/ChatSocket";
+import { socketAuthMiddleware } from "./middlewares/socket-auth-middleware";
 
 //cria servidor HTTP
 const server = createServer(app);

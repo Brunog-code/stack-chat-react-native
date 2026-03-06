@@ -1,8 +1,8 @@
 import { Router } from "express";
 
-import { authenticateToken } from "../../middlewares/authenticate-token.js";
-import { SearchService } from "../../services/search/searchService.js";
-import { SearchController } from "../../controllers/search/SearchController.js";
+import { authenticateToken } from "../../middlewares/authenticate-token";
+import { SearchService } from "../../services/search/searchService";
+import { SearchController } from "../../controllers/search/SearchController";
 
 const router = Router();
 

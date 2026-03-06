@@ -1,22 +1,45 @@
+// {
+//   "$schema": "https://www.schemastore.org/tsconfig",
+//   "_version": "24.0.0",
+
+//   "compilerOptions": {
+//     "lib": [
+//       "es2024",
+//       "ESNext.Array",
+//       "ESNext.Collection",
+//       "ESNext.Error",
+//       "ESNext.Iterator",
+//       "ESNext.Promise"
+//     ],
+//     "module": "nodenext",
+//     "target": "es2024",
+
+//     "strict": true,
+//     "esModuleInterop": true,
+//     "skipLibCheck": true,
+//     "moduleResolution": "node16"
+//   }
+// }
+
 {
   "$schema": "https://www.schemastore.org/tsconfig",
   "_version": "24.0.0",
 
   "compilerOptions": {
-    "lib": [
-      "es2024",
-      "ESNext.Array",
-      "ESNext.Collection",
-      "ESNext.Error",
-      "ESNext.Iterator",
-      "ESNext.Promise"
-    ],
-    "module": "nodenext",
+    "lib": ["es2024"],
+    "module": "CommonJS",
     "target": "es2024",
-
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "moduleResolution": "node16"
-  }
+    "moduleResolution": "node",
+    "outDir": "./dist",
+    // Removemos o rootDir fixo ou apontamos para a raiz do projeto
+    "baseUrl": ".",
+    "paths": {
+      "@prisma/client": ["./generated/prisma/client"]
+    }
+  },
+  "include": ["src/**/*", "generated/**/*"], // Incluímos a pasta gerada aqui
+  "exclude": ["node_modules", "dist"]
 }

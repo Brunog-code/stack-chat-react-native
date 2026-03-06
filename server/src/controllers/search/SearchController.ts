@@ -1,4 +1,4 @@
-import { SearchService } from "../../services/search/searchService.js";
+import { SearchService } from "../../services/search/searchService";
 import { Request, Response } from "express";
 
 export class SearchController {

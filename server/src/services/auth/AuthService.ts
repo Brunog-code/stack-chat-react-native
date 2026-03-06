@@ -1,6 +1,6 @@
 import { compare } from "bcryptjs";
-import prisma from "../../lib/prisma.js";
-import { generateToken } from "../../lib/jwt-generate-token.js";
+import prisma from "../../lib/prisma";
+import { generateToken } from "../../lib/jwt-generate-token";
 
 interface IAuthServiceLoginProps {
   email: string;
@@ -20,7 +20,7 @@ export class AuthService {
       },
     });
 
-    if (!user || !user.isActive) {
+    if (!user) {
       throw new Error("Usuário não cadastrado");
     }
 
@@ -46,7 +46,6 @@ export class AuthService {
     const user = await prisma.user.findUnique({
       where: {
         id,
-        isActive: true,
       },
       select: {
         id: true,
@@ -54,11 +53,10 @@ export class AuthService {
         email: true,
         createdAt: true,
         image: true,
-        isActive: true,
       },
     });
 
-    if (!user || !user.isActive) throw new Error("Usuário não encontrado");
+    if (!user) throw new Error("Usuário não encontrado");
 
     return user;
   };

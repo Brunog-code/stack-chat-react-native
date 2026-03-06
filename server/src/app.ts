@@ -1,10 +1,10 @@
 import express from "express";
 import cors from "cors";
-import authRoutes from "./routes/auth/authRoutes.js";
-import userRoutes from "./routes/user/userRoutes.js";
-import chatRoomRoutes from "./routes/chat-room/chatRoomRoutes.js";
-import uploadRoutes from "./routes/upload/uploadRoutes.js";
-import searchRoutes from "./routes/search/searchRoutes.js";
+import authRoutes from "./routes/auth/authRoutes";
+import userRoutes from "./routes/user/userRoutes";
+import chatRoomRoutes from "./routes/chat-room/chatRoomRoutes";
+import uploadRoutes from "./routes/upload/uploadRoutes";
+import searchRoutes from "./routes/search/searchRoutes";
 
 const app = express();
 app.use(express.json());

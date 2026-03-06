@@ -1,4 +1,4 @@
-import { UploadService } from "../../services/upload/uploadService.js";
+import { UploadService } from "../../services/upload/uploadService";
 import { Request, Response } from "express";
 
 export class UploadController {

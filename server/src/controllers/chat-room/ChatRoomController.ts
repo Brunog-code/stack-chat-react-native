@@ -1,6 +1,6 @@
 
 import { Request, Response } from "express";
-import { ChatRoomService } from "../../services/chat-room/ChatRoomService.js";
+import { ChatRoomService } from "../../services/chat-room/ChatRoomService";
 
 export class ChatRoomController {
   constructor(private readonly chatRoomService: ChatRoomService) {}

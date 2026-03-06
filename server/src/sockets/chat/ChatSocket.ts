@@ -1,6 +1,6 @@
 import { Server, Socket } from "socket.io";
-import { ChatMessageService } from "../../services/chat-room/ChatMessageService.js";
-import prisma from "../../lib/prisma.js";
+import { ChatMessageService } from "../../services/chat-room/ChatMessageService";
+
 export class ChatSocket {
   constructor(
     private readonly io: Server,

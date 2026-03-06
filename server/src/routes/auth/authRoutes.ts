@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { AuthController } from "../../controllers/auth/AuthController.js";
-import { AuthService } from "../../services/auth/AuthService.js";
-import { validate } from "../../middlewares/validate-schema.js";
-import { loginAuthSchema } from "../../middlewares/schemas/authSchemas.js";
-import { authenticateToken } from "../../middlewares/authenticate-token.js";
+import { AuthController } from "../../controllers/auth/AuthController";
+import { AuthService } from "../../services/auth/AuthService";
+import { validate } from "../../middlewares/validate-schema";
+import { loginAuthSchema } from "../../middlewares/schemas/authSchemas";
+import { authenticateToken } from "../../middlewares/authenticate-token";
 
 const router = Router();
 

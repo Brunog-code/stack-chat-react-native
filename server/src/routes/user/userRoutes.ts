@@ -1,12 +1,12 @@
 import { Router } from "express";
-import { UserService } from "../../services/user/UserService.js";
-import { UserController } from "../../controllers/user/UserController.js";
-import { validate } from "../../middlewares/validate-schema.js";
+import { UserService } from "../../services/user/UserService";
+import { UserController } from "../../controllers/user/UserController";
+import { validate } from "../../middlewares/validate-schema";
 import {
   registerUserSchema,
   updateImageSchema,
   updateNameSchema,
-} from "../../middlewares/schemas/userSchemas.js";
+} from "../../middlewares/schemas/userSchemas";
 
 const router = Router();
 
