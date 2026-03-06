@@ -25,7 +25,6 @@ COPY . .
 # 🔥 Compilar TypeScript (Se você estiver usando TS)
 # Certifique-se de que tem o script "build" no seu package.json
 RUN npm run build
-RUN echo '{"type": "commonjs"}' > dist/generated/prisma/package.json
 
 # O Socket.io e o Express precisam de portas abertas
 EXPOSE 3334
