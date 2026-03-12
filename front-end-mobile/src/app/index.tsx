@@ -6,7 +6,7 @@ export default function index() {
   const { user, loadingUser } = useAuth();
 
   if (loadingUser) {
-    <LoadingSpinner />;
+    return <LoadingSpinner />;
   }
 
   return user ? (

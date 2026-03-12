@@ -9,9 +9,9 @@ import { AuthProvider } from "../contexts/auth-context";
 import { theme } from "../constants/theme";
 import { StatusBar } from "expo-status-bar";
 
-export default function RootLayout() {
-  SplashScreen.preventAutoHideAsync();
+SplashScreen.preventAutoHideAsync();
 
+export default function RootLayout() {
   //espera fontes carregarem
   const [loaded, error] = useFonts({
     JetBrainsMonoBold: require("./../../assets/fonts/JetBrainsMono/JetBrainsMono-Bold.ttf"),
